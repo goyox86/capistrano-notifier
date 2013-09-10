@@ -61,12 +61,12 @@ class Capistrano::Notifier::Mail < Capistrano::Notifier::Base
 
   def perform_with_legacy_action_mailer(notifier = Capistrano::Notifier::Mailer)
     notifier.delivery_method = notify_method
-    notifier.deliver_notice(text, from, subject, to)
+    notifier.deliver_notice(html, from, subject, to)
   end
 
   def perform_with_action_mailer(notifier = Capistrano::Notifier::Mailer)
     notifier.smtp_settings = smtp_settings
-    notifier.notice(text, from, subject, to, notify_method).deliver
+    notifier.notice(html, from, subject, to, notify_method).deliver
   end
 
   def body
@@ -105,9 +105,9 @@ class Capistrano::Notifier::Mail < Capistrano::Notifier::Base
 
   def html
     body.gsub(
-      /([0-9a-f]{7})\.\.([0-9a-f]{7})/, "<a href=\"#{github_compare_prefix}/\\1...\\2\">\\1..\\2</a>\n"
+      /([0-9a-f]{7})\.\.([0-9a-f]{7})/, "<a href=\"#{github_compare_prefix}/\\1...\\2\">\\1..\\2</a>"
     ).gsub(
-      /^([0-9a-f]{7})/, "<a href=\"#{github_commit_prefix}/\\0\">\\0</a>\n"
+      /^([0-9a-f]{7})/, "<a href=\"#{github_commit_prefix}/\\0\">\\0</a>"
     )
   end
 
@@ -124,7 +124,7 @@ class Capistrano::Notifier::Mail < Capistrano::Notifier::Base
   end
 
   def text
-    body.gsub(/([0-9a-f]{7})\.\.([0-9a-f]{7})/, "#{github_compare_prefix}/\\1...\\2\n")
+    body.gsub(/([0-9a-f]{7})\.\.([0-9a-f]{7})/, "#{github_compare_prefix}/\\1...\\2")
   end
 
   def to
