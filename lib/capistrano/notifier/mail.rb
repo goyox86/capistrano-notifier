@@ -7,7 +7,6 @@ rescue LoadError => e
 end
 
 class Capistrano::Notifier::Mailer < ActionMailer::Base
-
   if ActionMailer::Base.respond_to?(:mail)
     def notice(text, from, subject, to, delivery_method)
       mail({
@@ -26,7 +25,6 @@ class Capistrano::Notifier::Mailer < ActionMailer::Base
       recipients to
     end
   end
-
 end
 
 class Capistrano::Notifier::Mail < Capistrano::Notifier::Base
@@ -60,6 +58,7 @@ class Capistrano::Notifier::Mail < Capistrano::Notifier::Base
   private
 
   def perform_with_legacy_action_mailer(notifier = Capistrano::Notifier::Mailer)
+    puts html
     notifier.delivery_method = notify_method
     notifier.deliver_notice(html, from, subject, to)
   end
@@ -104,11 +103,22 @@ class Capistrano::Notifier::Mail < Capistrano::Notifier::Base
   end
 
   def html
-    body.gsub(
+    html_body = body.gsub(
       /([0-9a-f]{7})\.\.([0-9a-f]{7})/, "<a href=\"#{github_compare_prefix}/\\1...\\2\">\\1..\\2</a>"
     ).gsub(
       /^([0-9a-f]{7})/, "<a href=\"#{github_commit_prefix}/\\0\">\\0</a>"
     )
+    <<-BODY.gsub(/^ {6}/, '')
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+      </head>
+      <body>
+      #{html_body}
+      </body>
+    </html>
+    BODY
   end
 
   def notify_method
