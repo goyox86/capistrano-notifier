@@ -96,7 +96,7 @@ class Capistrano::Notifier::Mail < Capistrano::Notifier::Base
   end
 
   def github_prefix
-    "https://github.com/#{github}"
+    "https://github.groupondev.com/#{github}"
   end
 
   def github
