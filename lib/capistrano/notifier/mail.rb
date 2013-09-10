@@ -11,11 +11,11 @@ class Capistrano::Notifier::Mailer < ActionMailer::Base
   if ActionMailer::Base.respond_to?(:mail)
     def notice(text, from, subject, to, delivery_method)
       mail({
-        :body => text,
-        :delivery_method => delivery_method,
-        :from => from,
-        :subject => subject,
-        :to => to
+        body: text,
+        delivery_method: delivery_method,
+        from: from,
+        subject: subject,
+        to: to
       })
     end
   else
@@ -105,9 +105,9 @@ class Capistrano::Notifier::Mail < Capistrano::Notifier::Base
 
   def html
     body.gsub(
-      /([0-9a-f]{7})\.\.([0-9a-f]{7})/, "<a href=\"#{github_compare_prefix}/\\1...\\2\">\\1..\\2</a>"
+      /([0-9a-f]{7})\.\.([0-9a-f]{7})/, "<a href=\"#{github_compare_prefix}/\\1...\\2\">\\1..\\2</a>\n"
     ).gsub(
-      /^([0-9a-f]{7})/, "<a href=\"#{github_commit_prefix}/\\0\">\\0</a>"
+      /^([0-9a-f]{7})/, "<a href=\"#{github_commit_prefix}/\\0\">\\0</a>\n"
     )
   end
 
@@ -124,7 +124,7 @@ class Capistrano::Notifier::Mail < Capistrano::Notifier::Base
   end
 
   def text
-    body.gsub(/([0-9a-f]{7})\.\.([0-9a-f]{7})/, "#{github_compare_prefix}/\\1...\\2")
+    body.gsub(/([0-9a-f]{7})\.\.([0-9a-f]{7})/, "#{github_compare_prefix}/\\1...\\2\n")
   end
 
   def to
