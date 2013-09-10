@@ -9,8 +9,12 @@ end
 class Capistrano::Notifier::Mailer < ActionMailer::Base
 
   if ActionMailer::Base.respond_to?(:mail)
+    headers = {
+      'Content-Type' => 'text/html; charset=utf-8'
+    }
     def notice(text, from, subject, to, delivery_method)
       mail({
+        headers: headers,
         body: text,
         delivery_method: delivery_method,
         from: from,
